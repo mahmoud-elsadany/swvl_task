@@ -1,7 +1,8 @@
 package com.mahmoudelsadany.swvltask.view.fragments
 
-import android.app.Activity
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -9,7 +10,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mahmoudelsadany.swvltask.R
 import com.mahmoudelsadany.swvltask.customAdapters.search.searchMoviesAdpater
@@ -44,18 +44,17 @@ class searchFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         setupViewModel()
         setupUI()
+        searchListener()
     }
 
     private fun setupViewModel() {
-
         viewModel = ViewModelProvider(this).get(searchViewModel::class.java)
         viewModel.movies.observe(viewLifecycleOwner, renderMovies)
-
     }
 
     //observers
     private val renderMovies = Observer<List<movie>> {
-        Log.v("swvl", "data updated $it")
+        Log.v("swvlSearch", "data updated $it")
         adapter.update(it)
     }
 
@@ -66,10 +65,28 @@ class searchFragment : Fragment() {
         searchList.adapter = adapter
     }
 
+    private fun searchListener() {
+        searchET.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                if(count == 0)
+                    viewModel.loadMovies(activity?.applicationContext!!)
+                else
+                    adapter.filter.filter(s.toString())
+            }
+
+        })
+    }
 
     override fun onResume() {
         super.onResume()
 
-        viewModel.loadMuseums(activity?.applicationContext!!)
+        viewModel.loadMovies(activity?.applicationContext!!)
     }
 }

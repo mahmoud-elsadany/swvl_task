@@ -1,24 +1,28 @@
 package com.mahmoudelsadany.swvltask.viewmodel
 
-import android.app.Application
+import android.annotation.SuppressLint
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import com.mahmoudelsadany.swvltask.model.localMovies.movie
 import com.mahmoudelsadany.swvltask.repositories.moviesRepository.getLocalMovies
 
-class searchViewModel: ViewModel() {
-
+class searchViewModel : ViewModel() {
 
 
     private val _movies = MutableLiveData<List<movie>>().apply { value = emptyList() }
     val movies: LiveData<List<movie>> = _movies
 
-    fun loadMuseums(context: Context) {
+
+    fun loadMovies(context: Context) {
         _movies.value = getLocalMovies.getMovies(context)
     }
+
+
+
+
 
 
 }
