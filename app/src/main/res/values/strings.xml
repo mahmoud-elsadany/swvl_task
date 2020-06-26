@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">SWVL task</string>
+    <string name="emptySTR">Empty List</string>
 </resources>
