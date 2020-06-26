@@ -1,5 +1,6 @@
 package com.mahmoudelsadany.swvltask.view.fragments
 
+import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -21,6 +22,7 @@ class searchFragment : Fragment() {
 
     private lateinit var viewModel: searchViewModel
     private lateinit var adapter: searchMoviesAdpater
+    private lateinit var mContext: Context
 
 
     companion object {
@@ -29,6 +31,15 @@ class searchFragment : Fragment() {
             return searchFragment()
         }
     }
+
+
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        mContext = context
+
+    }
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -43,7 +54,7 @@ class searchFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         setupViewModel()
-        setupUI()
+        setMoviesList()
         searchListener()
     }
 
@@ -59,8 +70,8 @@ class searchFragment : Fragment() {
     }
 
     //ui
-    private fun setupUI() {
-        adapter = searchMoviesAdpater(viewModel.movies.value ?: emptyList())
+    private fun setMoviesList() {
+        adapter = searchMoviesAdpater(viewModel.movies.value ?: emptyList(),mContext)
         searchList.layoutManager = LinearLayoutManager(activity?.applicationContext!!)
         searchList.adapter = adapter
     }
@@ -76,7 +87,7 @@ class searchFragment : Fragment() {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 if(count == 0)
-                    viewModel.loadMovies(activity?.applicationContext!!)
+                    viewModel.loadMovies(mContext)
                 else
                     adapter.filter.filter(s.toString())
             }
@@ -87,6 +98,6 @@ class searchFragment : Fragment() {
     override fun onResume() {
         super.onResume()
 
-        viewModel.loadMovies(activity?.applicationContext!!)
+        viewModel.loadMovies(mContext)
     }
 }

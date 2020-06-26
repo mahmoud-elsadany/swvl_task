@@ -17,7 +17,7 @@ class mainActivity : AppCompatActivity() {
 
     }
 
-    fun pushFragment(fragment: Fragment, FragmentTag: String?, bundle: Bundle?) {
+    public fun pushFragment(fragment: Fragment, FragmentTag: String?, bundle: Bundle?) {
         val transaction: FragmentTransaction
         transaction = supportFragmentManager.beginTransaction()
         if (bundle != null) fragment.setArguments(bundle)
